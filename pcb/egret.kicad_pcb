@@ -49,6 +49,7 @@
       (dielectric_constraints no)
     )
     (pad_to_mask_clearance 0.05)
+    (grid_origin 197.975 120.075)
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (disableapertmacros false)
@@ -78,9 +79,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "")
+      (outputdirectory "../gerbers/")
     )
   )
 
@@ -6611,7 +6612,10 @@
   (gr_line (start 234.80335 73.703263) (end 234.857562 73.680554) (layer "Edge.Cuts") (width 0.151694) (tstamp ffcb1afe-f311-468a-bf9f-6a9722a68b35))
   (gr_line (start 162.45063 70.905944) (end 177.841225 73.619501) (layer "Edge.Cuts") (width 0.151694) (tstamp ffd02b25-effa-4354-b521-3c402dee7773))
   (gr_line (start 141.107414 64.876372) (end 141.162383 64.859446) (layer "Edge.Cuts") (width 0.151694) (tstamp ffdae4e1-021e-47aa-9413-09881fca8ea3))
-  (gr_text "face up" (at 207.725 99.5 90) (layer "F.SilkS") (tstamp 5d1504f3-b750-4038-9c26-16e6ad75cda4)
+  (gr_text "egret v1.0 by rschenk" (at 207.725 99.5 90) (layer "F.SilkS") (tstamp 24060346-a24a-4a7c-a8eb-d30d5857a700)
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (gr_text "face up" (at 206.425 83.5) (layer "F.SilkS") (tstamp 5d1504f3-b750-4038-9c26-16e6ad75cda4)
     (effects (font (size 1 1) (thickness 0.15)))
   )
 
