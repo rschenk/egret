@@ -6,7 +6,7 @@
 # If the image isn't built, it will build one.
 
 PATH_TO_DOCKERFILE=../container # Relative to this script
-IMAGE_NAME=ergogen
+IMAGE_NAME=ergogen-egret
 
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 
