@@ -1,0 +1,583 @@
+units:
+  capw: 17.5        # Keycap width
+  caph: 16.5        # Keycap height
+  kx: 1cx           # Key spacing horizontal
+  ky: 1cy           # Key spacing vertical
+  center_spread: 45 # Distance between inner top keys *on center*
+  master_angle: 10  # Degrees that the two halves are angled
+  pinky_splay: -4   # Degrees of splay between pinky and ring
+  thumb_home_splay: 8
+  thumb_reachy_splay: 8
+  thumb_shift_x: -24.48
+  thumb_shift_y: -ky
+  ring_stagger: 4.75
+  middle_stagger: 2.375
+  index_stagger: -2.375
+  inner_stagger: -2.375
+
+  # Outlines
+  edge_border: 2 # border around the pcb, outside the keycaps' perimeter
+  outer_kx: (capw + 2edge_border)
+  outer_ky: (caph + 2edge_border)
+  cover_hole_margin: 3
+  mounting_hole_r: 1
+  clearance_hole_r: 2.5
+
+  # Components
+  promicro_w: 33
+  promicro_h: 19
+  promicro_shift_x: 0
+  promicro_shift_y: -12
+  power_switch_w: 9.3
+  power_switch_h: 5.4
+  reset_w: 6.0
+  reset_h: 3.5
+  bat_plug_w: 7.6
+  bat_plug_h: 5.9
+
+  # Laser
+  kerf: 0.006 * 25.4 # Inches
+
+points:
+  rotate: -master_angle
+  key:
+    padding: ky
+    footprints:
+      choc:
+        type: choc
+        params:
+          hotswap: true
+          reverse: false
+          keycaps: true
+          bottom_plate_cutouts: true
+          hotswap_vias: true
+        nets:
+          from: =column_net
+          to: =colrow
+      diode:
+        type: diode
+        params:
+          through_hole: false
+          front: true
+          back: false
+          via: true
+        nets:
+          from: =colrow
+          to: =row_net
+        anchor:
+          shift: [0, -4.7]
+  zones.matrix:
+    anchor:
+      shift: [100, -100] # Center on KiCad sheet
+    rotate: -pinky_splay
+    columns:
+      pinky:
+        spread: kx
+        rows:
+          top.bind: [0,4,0,0]
+          home.bind: [0,4,0,0]
+        key:
+          column_net: col1
+          mirror.column_net: col10
+      ring:
+        rotate: pinky_splay
+        origin: [-kx/2, -ky/2]
+        stagger: ring_stagger
+        spread: kx
+        rows.bottom.bind: [0,kx,0,0]
+        key:
+          column_net: col2
+          mirror.column_net: col9
+      middle:
+        stagger: middle_stagger
+        spread: kx
+        key:
+          column_net: col3
+          mirror.column_net: col8
+      index:
+        stagger: index_stagger
+        spread: kx
+        key:
+          column_net: col4
+          mirror.column_net: col7
+      inner:
+        stagger: inner_stagger
+        spread: kx
+        key:
+          column_net: col5
+          mirror.column_net: col6
+    rows:
+      bottom.row_net: row3
+      home.row_net: row2
+      top.row_net: row1
+
+  zones.thumbfan:
+    anchor:
+      ref: matrix_inner_bottom
+      shift: [thumb_shift_x, thumb_shift_y]
+    columns:
+      tucky:
+        rows.thumb.bind: [10,0,0,0]
+        key:
+          column_net: col3
+          mirror.column_net: col8
+      home:
+        rotate: -thumb_home_splay
+        origin: [-kx/2, -ky/2]
+        spread: kx
+        rows.thumb.bind: [10,0,0,5]
+        key:
+          column_net: col4
+          mirror.column_net: col7
+      reachy:
+        rotate: -thumb_reachy_splay
+        origin: [-kx/2, -ky/2]
+        spread: kx
+        rows.thumb.bind: [10,0,0,4]
+        key:
+          column_net: col5
+          mirror.column_net: col6
+    rows:
+      thumb.row_net: row4
+
+  mirror:
+    ref: matrix_inner_top
+    distance: center_spread
+
+outlines:
+  glue:
+    mcu_cover:
+        top.left:
+          ref: matrix_inner_top
+          shift: [(kx + kx - capw)/2, caph/2]
+        top.right:
+          ref: mirror_matrix_inner_top
+          shift: [(kx + kx - capw)/2, caph/2]
+        bottom.left:
+          ref: matrix_inner_bottom
+          shift: [(kx + kx - capw)/2, -caph/2]
+        bottom.right:
+          ref: mirror_matrix_inner_bottom
+          shift: [(kx + kx - capw)/2, -caph/2]
+  exports:
+    _center_polygon:
+      - type: polygon
+        points:
+          - ref: matrix_inner_top
+            shift: [outer_kx/2, outer_ky/2]
+          - ref: mirror_matrix_inner_top
+            shift: [outer_kx/2, outer_ky/2]
+          - ref: mirror_thumbfan_home_thumb
+          - ref: mirror_thumbfan_reachy_thumb
+            shift: [outer_kx/2, -outer_ky/2]
+          - ref:
+              - mirror_thumbfan_reachy_thumb
+              - thumbfan_reachy_thumb
+            shift: [0, -outer_ky/2 - 1.5]
+          - ref: thumbfan_reachy_thumb
+            shift: [outer_kx/2, -outer_ky/2]
+          - ref: thumbfan_home_thumb
+    _component_cutout_polygon:
+      - type: polygon
+        points:
+          - ref: mirror_matrix_inner_top
+            shift: [outer_kx/2, outer_ky/2 + 1]
+          - ref: mirror_matrix_inner_bottom
+            shift: [outer_kx/2, -caph/2 + 2]
+          - ref: matrix_inner_bottom
+            shift: [outer_kx/2, -caph/2 + 2]
+          - ref: matrix_inner_top
+            shift: [outer_kx/2, outer_ky/2 + 1]
+    _raw:
+      - type: keys
+        side: both
+        size: [outer_kx, outer_ky]
+        glue: false
+      - +_center_polygon
+    _keycaps:
+      - type: keys
+        side: both
+        size: [capw, caph]
+        corner: 1.7
+        glue: false
+        bound: false
+    _switch_cutouts:
+      - type: keys
+        side: both
+        size: [14 - kerf, 14 - kerf]
+        glue: false
+        bound: false
+    _power_switch:
+      - type: rectangle
+        anchor:
+          ref:
+            - matrix_inner_top
+            - mirror_matrix_inner_top
+          shift: [-power_switch_w/2, outer_ky/2 - power_switch_h - 2]
+        size: [power_switch_w, power_switch_h]
+
+    # Specifically not using `mirror` here because I need to pick the anchors off for the mounting hole footprints.
+    # This will be much easier once [this pr is merged](https://github.com/ergogen/ergogen/pull/46)
+    _cover_mounting_holes:
+      lower:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &cover_lower
+          ref: matrix_inner_bottom
+          shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+      mirror_lower:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_cover_lower
+          ref: mirror_matrix_inner_bottom
+          shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+      upper:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &cover_upper
+          ref: matrix_inner_home
+          shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+      mirror_upper:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_cover_upper
+          ref: mirror_matrix_inner_home
+          shift: [capw/2 + cover_hole_margin, -caph/2 + cover_hole_margin]
+
+    _cover_clearance_holes:
+      $extends: outlines.exports._cover_mounting_holes
+      lower.radius: clearance_hole_r
+      mirror_lower.radius: clearance_hole_r
+      upper.radius: clearance_hole_r
+      mirror_upper.radius: clearance_hole_r
+
+    _plate_mounting_holes:
+      ring_top:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &plate_ring_top
+          ref: matrix_ring_top
+          shift: [-10.1, -ky/2]
+      mirror_ring_top:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_plate_ring_top
+          ref: mirror_matrix_ring_top
+          shift: [-10.1, -ky/2]
+      ring_bottom:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &plate_ring_bottom
+          ref: matrix_ring_home
+          shift: [-9.5, -ky/2]
+      mirror_ring_bottom:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_plate_ring_bottom
+          ref: mirror_matrix_ring_home
+          shift: [-9.5, -ky/2]
+      index_top:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &plate_index_top
+          ref: matrix_index_top
+          shift: [8.5, -ky/2]
+      mirror_index_top:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_plate_index_top
+          ref: mirror_matrix_index_top
+          shift: [8.5, -ky/2]
+      thumb:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &plate_thumb
+          ref:
+            - thumbfan_home_thumb
+            - thumbfan_tucky_thumb
+          shift: [0, 8.5]
+      mirror_thumb:
+        type: circle
+        radius: mounting_hole_r
+        anchor: &mirror_plate_thumb
+          ref:
+            - mirror_thumbfan_home_thumb
+            - mirror_thumbfan_tucky_thumb
+          shift: [0, 8.5]
+
+    _plate_clearance_holes:
+      $extends: outlines.exports._plate_mounting_holes
+      ring_top.radius: clearance_hole_r
+      ring_bottom.radius: clearance_hole_r
+      index_top.radius: clearance_hole_r
+      thumb.radius: clearance_hole_r
+      mirror_ring_top.radius: clearance_hole_r
+      mirror_ring_bottom.radius: clearance_hole_r
+      mirror_index_top.radius: clearance_hole_r
+      mirror_thumb.radius: clearance_hole_r
+
+    _pcb_edge:
+      - _raw
+
+    _mcu_cover_polygon:
+      # A little hack due to how we are using "glue" for this
+      - type: keys
+        side: glue
+    _mcu_cover_area:
+      - type: outline
+        name: _mcu_cover_polygon
+        fillet: 2
+      - -_cover_mounting_holes
+
+    top_plate:
+      - _raw
+      - -_component_cutout_polygon
+      - ^_switch_cutouts
+      - ^_cover_clearance_holes
+      - ^_plate_mounting_holes
+
+    bottom_plate_glowpro:
+      - _raw
+      - ^_cover_mounting_holes
+      - ^_plate_mounting_holes
+
+    bottom_plate_lowpro:
+      - _raw
+      - -_power_switch
+      - ^_cover_mounting_holes
+      - ^_plate_mounting_holes
+
+    bottom_grip:
+      - _raw
+      - -_power_switch
+      - ^_cover_clearance_holes
+      - ^_plate_clearance_holes
+
+    mcu_cover:
+      - _mcu_cover_polygon
+      - -_cover_mounting_holes
+
+    test:
+      - +_raw
+      - ^_keycaps
+      #- ^_switch_cutouts
+      - ^_cover_mounting_holes
+      - ^_plate_mounting_holes
+      - ^_mcu_cover_area
+      #- ^_power_switch
+
+pcbs:
+  egret:
+    footprints:
+      mcu:
+        type: promicro
+        params:
+          orientation: up
+          bottom_plate_cutouts: true
+        nets:
+          P1: led
+          P9: col1
+          P8: col2
+          P7: col3
+          P6: col4
+          P5: col5
+          P18: col6
+          P15: col7
+          P14: col8
+          P16: col9
+          P10: col10
+          P21: row1
+          P20: row2
+          P2: row3
+          P3: row4
+        anchor: &promicro_anchor
+          ref:
+            - matrix_inner_top
+            - mirror_matrix_inner_top
+          rotate: -90
+          shift: [promicro_shift_x, promicro_shift_y]
+      mcu_bottom_cutouts:
+        type: promicro_bottom_cutouts
+        anchor: *promicro_anchor
+
+      power_sw:
+        type: slider
+        anchor:
+          ref:
+            - matrix_inner_top
+            - mirror_matrix_inner_top
+          shift: [0, 6]
+        nets:
+          common: BAT_POS
+          b: RAW
+        params:
+          side: B
+
+      battery:
+        type: jstph
+        anchor:
+          ref:
+            - matrix_inner_top
+            - mirror_matrix_inner_top
+          shift: [-promicro_h/2 + 0.5, -promicro_w/2 + promicro_shift_y - bat_plug_h/2]
+          rotate: 90
+        nets:
+          pos: BAT_POS
+          neg: GND
+        params:
+          bottom_plate_cutouts: true
+
+      reset:
+        type: reset
+        anchor:
+          ref:
+            - matrix_inner_bottom
+            - mirror_matrix_inner_bottom
+          shift: [0, -caph/2 + reset_h/2 + 1.5]
+        nets:
+          from: RST
+          to: GND
+        params:
+          bottom_plate_cutouts: true
+
+      led1:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref: matrix_middle_top
+          shift: [kx/2 - 2, -5]
+        nets:
+          din: led
+          dout: L2
+
+      led2:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref: matrix_pinky_top
+          shift: [3.5, -5]
+        nets:
+          din: L2
+          dout: L3
+
+      led3:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref: matrix_pinky_home
+          shift: [3, -5.5]
+        nets:
+          din: L3
+          dout: L4
+
+      led4:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref: matrix_middle_bottom
+          shift: [kx/2 - 2, -7]
+        nets:
+          din: L4
+          dout: L5
+
+      led5:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [5, -9]
+        nets:
+          din: L5
+          dout: L6
+
+      led6:
+        type: ws2812b
+        params.side: B
+        anchor:
+          ref:
+            - mirror_thumbfan_reachy_thumb
+            - thumbfan_reachy_thumb
+          shift: [0, 3]
+        nets:
+          din: L6
+          dout: L7
+
+      led7:
+        $extends: pcbs.egret.footprints.led5
+        anchor.ref: mirror_matrix_inner_bottom
+        nets:
+          din: L7
+          dout: L8
+
+      led8:
+        $extends: pcbs.egret.footprints.led4
+        anchor.ref: mirror_matrix_middle_bottom
+        nets:
+          din: L8
+          dout: L9
+
+      led9:
+        $extends: pcbs.egret.footprints.led3
+        anchor.ref: mirror_matrix_pinky_home
+        nets:
+          din: L9
+          dout: L10
+
+      led10:
+        $extends: pcbs.egret.footprints.led2
+        anchor.ref: mirror_matrix_pinky_top
+        nets:
+          din: L10
+          dout: L11
+
+      led11:
+        $extends: pcbs.egret.footprints.led1
+        anchor.ref: mirror_matrix_middle_top
+        nets:
+          din: L11
+          dout: ''
+
+      hole_cover_lower:
+        type: hole_m2
+        anchor: *cover_lower
+        params:
+          plated: true
+      mirror_hole_cover_lower:
+        $extends: pcbs.egret.footprints.hole_cover_lower
+        anchor: *mirror_cover_lower
+      hole_cover_upper:
+        $extends: pcbs.egret.footprints.hole_cover_lower
+        anchor: *cover_upper
+      mirror_hole_cover_upper:
+        $extends: pcbs.egret.footprints.hole_cover_lower
+        anchor: *mirror_cover_upper
+      hole_plate_ring_top:
+        type: hole_m2
+        params:
+          plated: true
+        anchor: *plate_ring_top
+      hole_plate_ring_bottom:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *plate_ring_bottom
+      hole_plate_index_top:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *plate_index_top
+      hole_plate_thumb:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *plate_thumb
+      mirror_hole_plate_ring_top:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *mirror_plate_ring_top
+      mirror_hole_plate_ring_bottom:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *mirror_plate_ring_bottom
+      mirror_hole_plate_index_top:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *mirror_plate_index_top
+      mirror_hole_plate_thumb:
+        $extends: pcbs.egret.footprints.hole_plate_ring_top
+        anchor: *mirror_plate_thumb
+    outlines:
+      edge:
+        outline: _pcb_edge
+        layer: Edge.Cuts

@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  ergogen:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ..
+        target: /workdir
+    working_dir: /workdir
+    # entrypoint: "sleep infinity"
+    command: "pinki.yml"
+  inkscape:
+    build:
+      context: .
+      dockerfile: Dockerfile-inkscape

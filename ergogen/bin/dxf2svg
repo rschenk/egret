@@ -1,0 +1,13 @@
+#!/bin/sh
+
+INKSCAPE_BIN=/Applications/Inkscape.app/Contents/MacOS/inkscape
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
+
+for FILE in $SCRIPT_DIR/../output/outlines/*.dxf
+do
+$INKSCAPE_BIN $FILE \
+  --export-area-drawing \
+  --export-plain-svg \
+  --export-filename=$(dirname "$FILE")/$(basename "$FILE" .dxf).svg
+done
