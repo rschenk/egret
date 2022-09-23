@@ -23,3 +23,6 @@ fp-info-cache
 
 # Zipped gerbers
 gerbers.zip
+
+# SVG versions of Ergogen output
+ergogen/output/outlines/*.svg

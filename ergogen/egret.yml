@@ -21,7 +21,7 @@ units:
   outer_ky: (caph + 2edge_border)
   cover_hole_margin: 3
   mounting_hole_r: 1
-  clearance_hole_r: 2.5
+  clearance_hole_r: 2.75
 
   # Components
   promicro_w: 33
