@@ -22,6 +22,8 @@ units:
   cover_hole_margin: 3
   mounting_hole_r: 1
   clearance_hole_r: 2.75
+  # Y component of the outer corner of a switch, after it's been rotated by master_angle
+  outer_corner_y: 8.228 # −(outer_kx/2) * sin(master_angle * pi/180) + (outer_ky/2) * cos(master_angle * pi/180)
 
   # Components
   promicro_w: 33
@@ -208,13 +210,19 @@ outlines:
         glue: false
         bound: false
     _power_switch:
-      - type: rectangle
+      cutout:
+        type: rectangle
         anchor:
           ref:
             - matrix_inner_top
             - mirror_matrix_inner_top
           shift: [-power_switch_w/2, outer_ky/2 - power_switch_h - 2]
         size: [power_switch_w, power_switch_h]
+    _glowpro_power_switch_notch:
+      $extends: outlines.exports._power_switch
+      cutout.anchor.shift: [,outer_corner_y]
+      cutout.size: [, 2edge_border]
+
 
     # Specifically not using `mirror` here because I need to pick the anchors off for the mounting hole footprints.
     # This will be much easier once [this pr is merged](https://github.com/ergogen/ergogen/pull/46)
@@ -338,6 +346,7 @@ outlines:
 
     bottom_plate_glowpro:
       - _raw
+      - ^_glowpro_power_switch_notch
       - ^_cover_mounting_holes
       - ^_plate_mounting_holes
 
