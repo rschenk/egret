@@ -27,3 +27,27 @@ If you decide to edit a footprint, you'll need to remove the image and rebuild i
 # Only if you modify a footprint, rebuild the image like so:
 $ docker image rm -f ergogen-egret && bin/ergogen egret.yml
 ```
+## Firmware
+
+### QMK
+
+Egret is not in the main QMK repo yet (or probably ever) but it's easy to add.
+Assuming you already have QMK set up on your computer, copy the contents of `firmware/qmk` to `qmk_firmware/keyboards/egret`. There is a very minimal basic keymap for you to start with.
+
+```sh
+cp -R ./firmware/qmk /path/to/qmk_firmware/keyboards/egret
+cd !$
+cp -R keymaps/default keymaps/your-github-username
+```
+
+### ZMK
+
+Egret is not in the main ZMK repo but it's easy to add. Assuming you already have a zmk-config setp already, copy the contents of `firmware/zmk` to `zmk-config/config/boards/shields/egret`, then make the usual setup. There is a basic minimal keymap for you to start with.
+
+```sh
+cp -R ./firmware/zmk /path/to/zmk-config/config/boards/shields/egret
+cd /path/to/zmk-config/config
+cp boards/shields/egret/egret.keymap .
+touch egret.conf
+```
+
