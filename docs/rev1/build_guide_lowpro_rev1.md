@@ -41,6 +41,8 @@ Please note that *you cannot put LEDs on a Low-pro PCB,* otherwise the bottom ca
 
 ## PCB Assembly
 
+I like to paint the edges of my PCBs white (or whatever matches your case) with Posca marker, so consider doing that now.
+
 Gotta start somewhere, lets do the power switch first. Put a small dot of solder on one of the pads on the board, place the reset switch, then heat that dot to tack it in place. Now with the switch tacked in place you can do the rest of the pads.
 
 Next solder on all the hotswap sockets in a similar fashion.
