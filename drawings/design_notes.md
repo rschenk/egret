@@ -1,0 +1,1 @@
+PEM M2 fastener hole should be 0.118" (3.00mm) in the drawing to be a perfect fit after lasering.
