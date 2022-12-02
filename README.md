@@ -25,6 +25,8 @@ The bottom plate is cut out to accomodate the hotswap sockets, making it about a
 
 ![bottom-plate](./docs/images/bottom-plate.jpeg)
 
+![egret-vs-fifi](./docs/images/egret-vs-fifi.jpeg)
+
 ## Build Guide
 
 There are two ways to build it, with LED underglow (glow-profile case) and without (low profile case). The LED version requires a different bottom plate which is 1.5mm taller than the low-profile version, but everything else is the same between them—same PCB, top plate, gaskets, etc. _Either_ version can be used with bluetooth! Obviously running the LEDs will drain your battery much faster, but it's easy to have  the best of both worlds by configuring ZMK to automatically enable LEDs when plugged into USB and disable them when on battery power.
