@@ -4,7 +4,7 @@ A 36 key Choc-spaced monoblock keyboard that's wireless compatible, hot swappabl
 
 The Egret's bottom plate has cutouts for the hotswap sockets, essentially the thinnest board possible with hotswap sockets. Silicone gaskets sandwiching both sides of the PCB dampen sounds and vibrations. The entire bottom is covered with rubber sheet so you can use it right on your laptop keys if you're so inclined!
 
-![wired-and-wireless](/Users/rschenk/Documents/Keyboarding/egret/docs/images/wired-and-wireless.jpg)
+![wired-and-wireless](./docs/images/wired-and-wireless.jpg)
 
 ## Features
 
@@ -19,11 +19,11 @@ The Egret's bottom plate has cutouts for the hotswap sockets, essentially the th
 
 The bottom plate is cut out to accomodate the hotswap sockets, making it about as thin as is physically possible to make a hotswap board. The entire bottom is intended to be covered with rubber, sililicone, EVA, etc, so you can put it down on right over your laptop's keys. Yes this actually works and is useable! 
 
-![profile](/Users/rschenk/Documents/Keyboarding/egret/docs/images/profile.jpeg)
+![profile](./docs/images/profile.jpeg)
 
-![on-laptop](/Users/rschenk/Documents/Keyboarding/egret/docs/images/on-laptop.jpeg)
+![on-laptop](./docs/images/on-laptop.jpeg)
 
-![bottom-plate](/Users/rschenk/Documents/Keyboarding/egret/docs/images/bottom-plate.jpeg)
+![bottom-plate](./docs/images/bottom-plate.jpeg)
 
 ## Build Guide
 
